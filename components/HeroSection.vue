@@ -47,26 +47,28 @@ const handleMagneticLeave = (element: HTMLElement) => {
 onMounted(() => {
   type()
 
-  const ctx = gsap.context(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'power4.out' }, delay: 0.3 })
+  if (sectionRef.value) {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: 'power4.out' }, delay: 0.3 })
 
-    tl.fromTo('.hero-badge', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8 })
-      .fromTo('.hero-label', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.3')
-      .fromTo('.hero-line-1', { y: 130, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3 }, '-=0.5')
-      .fromTo('.hero-line-2', { y: 130, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3 }, '-=1.1')
-      .fromTo('.hero-meta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 }, '-=0.6')
-      .fromTo('.hero-cta', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.7, stagger: 0.1 }, '-=0.5')
+      tl.fromTo('.hero-badge', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.8 })
+        .fromTo('.hero-label', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.3')
+        .fromTo('.hero-line-1', { y: 130, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3 }, '-=0.5')
+        .fromTo('.hero-line-2', { y: 130, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3 }, '-=1.1')
+        .fromTo('.hero-meta', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.1 }, '-=0.6')
+        .fromTo('.hero-cta', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.7, stagger: 0.1 }, '-=0.5')
 
-    magneticWrappers.value.forEach(wrapper => {
-      wrapper.addEventListener('mousemove', (e) => handleMagneticMove(e, wrapper))
-      wrapper.addEventListener('mouseleave', () => handleMagneticLeave(wrapper))
+      magneticWrappers.value.forEach(wrapper => {
+        wrapper.addEventListener('mousemove', (e) => handleMagneticMove(e, wrapper))
+        wrapper.addEventListener('mouseleave', () => handleMagneticLeave(wrapper))
+      })
+    }, sectionRef.value)
+
+    onUnmounted(() => {
+      ctx.revert()
+      clearTimeout(typingInterval)
     })
-  }, sectionRef.value)
-
-  onUnmounted(() => {
-    ctx.revert()
-    clearTimeout(typingInterval)
-  })
+  }
 })
 </script>
 
@@ -111,12 +113,12 @@ onMounted(() => {
         <!-- Massive typography block -->
         <div class="flex flex-col gap-0 overflow-hidden">
           <div class="overflow-hidden py-2">
-            <h1 class="hero-line-1 text-[13vw] md:text-[9vw] xl:text-[8.5rem] font-black uppercase tracking-[-0.03em] leading-[0.87] text-white">
+            <h1 class="hero-line-1 font-black uppercase tracking-[-0.03em] leading-[0.87] text-white" style="font-size: clamp(2.5rem, 12vw, 8.5rem);">
               Developer
             </h1>
           </div>
           <div class="overflow-hidden py-2">
-            <h1 class="hero-line-2 text-[13vw] md:text-[9vw] xl:text-[8.5rem] font-black uppercase tracking-[-0.03em] leading-[0.87]" style="color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.25);">
+            <h1 class="hero-line-2 font-black uppercase tracking-[-0.03em] leading-[0.87]" style="color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.25); font-size: clamp(2.5rem, 12vw, 8.5rem);">
               & Designer.
             </h1>
           </div>

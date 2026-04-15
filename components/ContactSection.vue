@@ -26,15 +26,19 @@ const submitForm = async () => {
     const supabase = useSupabaseClient()
     
     // Use a simpler approach without type definitions
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('messages')
       .insert([{
         name: form.value.name,
         email: form.value.email,
         message: form.value.message
       }] as any)
+      .select('id')
 
     if (error) throw error
+    
+    // Log success with message ID
+    console.log('Message inserted with ID:', data[0].id)
     
     // Reset form on success
     form.value = { name: '', email: '', message: '' }

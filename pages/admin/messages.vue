@@ -32,6 +32,11 @@ const fetchMessages = async () => {
   loading.value = true
   error.value = null
   try {
+    // Log auth state for debugging
+    const user = useSupabaseUser()
+    console.log('Auth user:', user.value)
+    console.log('Auth role:', user.value?.role)
+    
     const { data, error: sbError } = await supabase
       .from('messages')
       .select('*')
