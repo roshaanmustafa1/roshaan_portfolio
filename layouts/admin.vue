@@ -49,12 +49,23 @@ const toggleSidebar = () => {
 </template>
 
 <style scoped>
+/* Sidebar transition */
+aside {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Backdrop transition */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.3s ease;
 }
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Active state transition */
+.nuxt-link-active {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 </style>
