@@ -146,13 +146,13 @@ onMounted(() => {
           <!-- Right: CTA Buttons -->
           <div class="flex items-center gap-5 flex-shrink-0">
             <div class="relative inline-block p-5 -m-5 cursor-pointer" :ref="el => { if (el) magneticWrappers.push(el as HTMLElement) }">
-              <a href="#projects" class="hero-cta inline-flex items-center gap-3 py-4 px-8 bg-white text-black rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-neutral-100 transition-colors group">
+              <a href="#projects" class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-white text-black rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-neutral-100 transition-colors group">
                 View Work
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" class="group-hover:translate-x-1 transition-transform" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </a>
             </div>
             <div class="relative inline-block p-5 -m-5 cursor-pointer" :ref="el => { if (el) magneticWrappers.push(el as HTMLElement) }">
-              <a href="#contact" class="hero-cta inline-flex items-center gap-3 py-4 px-8 bg-transparent border border-white/20 text-white rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-white/5 transition-colors group">
+              <a href="#contact" class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-transparent border border-white/20 text-white rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-white/5 transition-colors group">
                 Hire Me
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" class="group-hover:rotate-45 transition-transform duration-300" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
               </a>
