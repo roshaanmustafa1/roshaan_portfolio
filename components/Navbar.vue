@@ -26,24 +26,35 @@ const closeMobileMenu = () => {
   if (isMobileMenuOpen.value) toggleMobileMenu()
 }
 
+let menuAnimation: any = null
+
 const animateMenuOpen = () => {
-  const tl = gsap.timeline()
-  tl.to('.mobile-menu-overlay', {
+  if (menuAnimation) menuAnimation.kill()
+  menuAnimation = gsap.timeline()
+  
+  menuAnimation.to('.mobile-menu-overlay', {
     clipPath: 'circle(150% at 100% 0%)',
     duration: 0.8,
     ease: 'power4.inOut'
   })
-  tl.from('.mobile-nav-link', {
-    y: 30,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.1,
-    ease: 'power3.out'
-  }, '-=0.3')
+  menuAnimation.fromTo('.mobile-nav-link', 
+    { y: 30, opacity: 0 },
+    {
+      y: 0,
+      opacity: 1,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: 'power3.out'
+    }, 
+    '-=0.3'
+  )
 }
 
 const animateMenuClose = () => {
-  gsap.to('.mobile-menu-overlay', {
+  if (menuAnimation) menuAnimation.kill()
+  menuAnimation = gsap.timeline()
+  
+  menuAnimation.to('.mobile-menu-overlay', {
     clipPath: 'circle(0% at 100% 0%)',
     duration: 0.6,
     ease: 'power4.inOut'
@@ -82,7 +93,8 @@ const navLinks = [
   <header
     ref="navRef"
     :class="[
-      'fixed top-0 left-0 right-0 z-[100] transition-all duration-500',
+      'fixed top-0 left-0 right-0 transition-all duration-500',
+      isMobileMenuOpen ? 'z-[110]' : 'z-[100]',
       isScrolled 
         ? 'bg-neutral-950/80 backdrop-blur-md border-b border-white/5 py-4' 
         : 'bg-transparent py-8'
@@ -115,45 +127,62 @@ const navLinks = [
       <div class="md:hidden nav-item">
         <button 
           @click="toggleMobileMenu"
-          class="relative z-[110] flex flex-col justify-between w-6 h-3.5 group"
+          :aria-label="isMobileMenuOpen ? 'Close mobile menu' : 'Open mobile menu'"
+          class="relative z-[120] flex h-10 w-10 items-center justify-center"
         >
-          <span :class="['w-full h-[1.5px] bg-white transition-all duration-300 transform origin-left', isMobileMenuOpen ? 'rotate-[42deg] translate-x-[2px]' : '']"></span>
-          <span :class="['w-full h-[1.5px] bg-white transition-all duration-300', isMobileMenuOpen ? 'opacity-0 scale-x-0' : '']"></span>
-          <span :class="['w-full h-[1.5px] bg-white transition-all duration-300 transform origin-left', isMobileMenuOpen ? '-rotate-[42deg] translate-x-[2px]' : '']"></span>
+          <span
+            :class="[
+              'absolute h-[1.5px] w-6 bg-white transition-all duration-300',
+              isMobileMenuOpen ? 'rotate-45 translate-y-0' : '-translate-y-[6px]'
+            ]"
+          ></span>
+          <span
+            :class="[
+              'absolute h-[1.5px] w-6 bg-white transition-all duration-300',
+              isMobileMenuOpen ? 'opacity-0 scale-x-0' : 'opacity-100 scale-x-100'
+            ]"
+          ></span>
+          <span
+            :class="[
+              'absolute h-[1.5px] w-6 bg-white transition-all duration-300',
+              isMobileMenuOpen ? '-rotate-45 translate-y-0' : 'translate-y-[6px]'
+            ]"
+          ></span>
         </button>
       </div>
 
     </div>
-
-    <!-- Mobile menu overlay -->
-    <div 
-      class="mobile-menu-overlay fixed inset-0 bg-neutral-950 z-[105] flex flex-col items-center justify-center pointer-events-none"
-      style="clip-path: circle(0% at 100% 0%);"
-      :class="{ 'pointer-events-auto': isMobileMenuOpen }"
-    >
-      <nav class="flex flex-col items-center gap-8">
-        <a 
-          v-for="link in navLinks" 
-          :key="link.name" 
-          :href="link.href"
-          @click="closeMobileMenu"
-          class="mobile-nav-link text-4xl font-black uppercase tracking-tighter text-white hover:text-neutral-500 transition-colors"
-        >
-          {{ link.name }}
-        </a>
-        <a 
-          href="#contact" 
-          @click="closeMobileMenu"
-          class="mobile-nav-link mt-8 px-10 py-4 border border-white/20 rounded-full text-sm uppercase tracking-widest font-bold"
-        >
-          Let's Talk
-        </a>
-      </nav>
-      
-      <!-- Decorative background text in mobile menu -->
-      <div class="absolute bottom-20 left-1/2 -translate-x-1/2 text-[20vw] font-black text-white/[0.02] leading-none select-none pointer-events-none whitespace-nowrap uppercase">
-        Navigation
-      </div>
-    </div>
   </header>
+
+  <!-- Mobile menu overlay -->
+  <div 
+    class="mobile-menu-overlay fixed inset-0 bg-neutral-950 z-[105] flex flex-col items-center justify-center pointer-events-none"
+    style="clip-path: circle(0% at 100% 0%);"
+    :class="{ 'pointer-events-auto': isMobileMenuOpen }"
+    @click="closeMobileMenu"
+  >
+    <nav class="flex flex-col items-center gap-8" @click.stop>
+      <a 
+        v-for="link in navLinks" 
+        :key="link.name" 
+        :href="link.href"
+        @click="closeMobileMenu"
+        class="mobile-nav-link text-4xl font-black uppercase tracking-tighter text-white hover:text-neutral-500 transition-colors"
+      >
+        {{ link.name }}
+      </a>
+      <a 
+        href="#contact" 
+        @click="closeMobileMenu"
+        class="mobile-nav-link mt-8 px-10 py-4 border border-white/20 rounded-full text-sm uppercase tracking-widest font-bold"
+      >
+        Let's Talk
+      </a>
+    </nav>
+    
+    <!-- Decorative background text in mobile menu -->
+    <div class="absolute bottom-20 left-1/2 -translate-x-1/2 text-[20vw] font-black text-white/[0.02] leading-none select-none pointer-events-none whitespace-nowrap uppercase">
+      Navigation
+    </div>
+  </div>
 </template>
