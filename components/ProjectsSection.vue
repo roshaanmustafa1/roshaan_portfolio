@@ -128,6 +128,7 @@ let headerCtx: gsap.Context
 let itemsCtx: gsap.Context
 
 const initItemsAnimation = () => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 1024px)').matches) return
   if (itemsCtx) itemsCtx.revert()
   
   itemsCtx = gsap.context(() => {
@@ -193,6 +194,8 @@ const setFilter = async (cat: string) => {
 }
 
 onMounted(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 1024px)').matches) return
+
   headerCtx = gsap.context(() => {
     // Label slides in from left
     gsap.from('.proj-label', {
@@ -258,13 +261,22 @@ onUnmounted(() => {
           :key="project.id"
           :href="project.link"
           target="_blank"
-          class="proj-card group block relative cursor-pointer"
+          class="proj-card group block relative cursor-pointer [will-change:transform]"
         >
           <!-- Image Container -->
           <div class="proj-img-wrap overflow-hidden aspect-[4/3] rounded-sm w-full mb-5 bg-neutral-900 border border-white/5 relative">
             <div class="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
             <div class="w-full h-[120%] -mt-[10%]">
-              <img :src="project.image" :alt="project.title" class="proj-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-105" />
+              <NuxtImg
+                :src="project.image"
+                :alt="project.title"
+                width="520"
+                height="390"
+                format="webp"
+                quality="75"
+                loading="lazy"
+                class="proj-img w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition duration-700 group-hover:scale-105 [will-change:transform]"
+              />
             </div>
           </div>
           <!-- Text Layer -->

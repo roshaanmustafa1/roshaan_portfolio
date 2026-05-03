@@ -5,48 +5,67 @@ import gsap from 'gsap'
 const cursor = ref<HTMLElement | null>(null)
 const dot = ref<HTMLElement | null>(null)
 const isHovering = ref(false)
+let canUseCustomCursor = false
+let lastDomQueryTime = 0
+let cursorFrame = 0
+let mouseX = 0
+let mouseY = 0
 
-const updateCursor = (e: MouseEvent) => {
-  // Move the dot immediately
+const moveCursor = () => {
+  cursorFrame = 0
+
   gsap.to(dot.value, {
-    x: e.clientX,
-    y: e.clientY,
+    x: mouseX,
+    y: mouseY,
     duration: 0,
   })
-  
-  // Move the outline smoothly
+
   gsap.to(cursor.value, {
-    x: e.clientX,
-    y: e.clientY,
+    x: mouseX,
+    y: mouseY,
     duration: 0.15,
     ease: 'power2.out'
   })
+}
 
-  // Detect hover on interactive elements
-  const target = e.target as HTMLElement
-  const isInteractive = target.closest('a, button, [role="button"], input, textarea, .magnetic-btn')
-  
-  if (isInteractive && !isHovering.value) {
-    isHovering.value = true
-    gsap.to(cursor.value, { scale: 1.5, borderColor: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.1)', duration: 0.3 })
-    gsap.to(dot.value, { scale: 0, duration: 0.3 })
-  } else if (!isInteractive && isHovering.value) {
-    isHovering.value = false
-    gsap.to(cursor.value, { scale: 1, borderColor: 'rgba(255,255,255,0.4)', backgroundColor: 'transparent', duration: 0.3 })
-    gsap.to(dot.value, { scale: 1, duration: 0.3 })
+const updateCursor = (e: MouseEvent) => {
+  mouseX = e.clientX
+  mouseY = e.clientY
+
+  if (!cursorFrame) {
+    cursorFrame = requestAnimationFrame(moveCursor)
+  }
+
+  // Throttle heavy DOM querying to ~10 times per second
+  const now = Date.now()
+  if (now - lastDomQueryTime > 100) {
+    lastDomQueryTime = now
+    
+    // Detect hover on interactive elements
+    const target = e.target as HTMLElement
+    const isInteractive = target.closest('a, button, [role="button"], input, textarea, .magnetic-btn')
+    
+    if (isInteractive && !isHovering.value) {
+      isHovering.value = true
+      gsap.to(cursor.value, { scale: 1.5, borderColor: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.1)', duration: 0.3 })
+      gsap.to(dot.value, { scale: 0, duration: 0.3 })
+    } else if (!isInteractive && isHovering.value) {
+      isHovering.value = false
+      gsap.to(cursor.value, { scale: 1, borderColor: 'rgba(255,255,255,0.4)', backgroundColor: 'transparent', duration: 0.3 })
+      gsap.to(dot.value, { scale: 1, duration: 0.3 })
+    }
   }
 }
 
 onMounted(() => {
+  canUseCustomCursor = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1024px)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (!canUseCustomCursor) return
+
   // Ensure the cursor is visible and global cursor is hidden
   document.body.style.cursor = 'none'
   
-  // Create interactive class for global links
-  const links = document.querySelectorAll('a, button')
-  links.forEach(link => {
-    link.style.cursor = 'none'
-  })
-
   window.addEventListener('mousemove', updateCursor)
   
   // Initially center and reveal
@@ -57,8 +76,11 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  window.removeEventListener('mousemove', updateCursor)
-  document.body.style.cursor = 'auto'
+  if (canUseCustomCursor) {
+    if (cursorFrame) cancelAnimationFrame(cursorFrame)
+    window.removeEventListener('mousemove', updateCursor)
+    document.body.style.cursor = 'auto'
+  }
 })
 </script>
 
@@ -79,7 +101,7 @@ onUnmounted(() => {
 
 <style>
 /* Fallback to hide cursor globally when CustomCursor is active */
-@media (min-width: 768px) {
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   * {
     cursor: none !important;
   }

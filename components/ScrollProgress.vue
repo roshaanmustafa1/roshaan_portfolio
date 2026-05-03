@@ -2,19 +2,37 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const scrollProgress = ref(0)
+let ticking = false
+let cachedMaxScroll = 0
+let resizeObserver: ResizeObserver | null = null
+
+const calculateMaxScroll = () => {
+  cachedMaxScroll = document.documentElement.scrollHeight - window.innerHeight
+}
 
 const updateScroll = () => {
-  const scrollPosition = window.scrollY
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-  scrollProgress.value = (scrollPosition / maxScroll) * 100
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(() => {
+    const scrollPosition = window.scrollY
+    scrollProgress.value = cachedMaxScroll > 0 ? (scrollPosition / cachedMaxScroll) * 100 : 0
+    ticking = false
+  })
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', updateScroll)
+  calculateMaxScroll()
+  resizeObserver = new ResizeObserver(calculateMaxScroll)
+  resizeObserver.observe(document.documentElement)
+  resizeObserver.observe(document.body)
+  window.addEventListener('resize', calculateMaxScroll, { passive: true })
+  window.addEventListener('scroll', updateScroll, { passive: true })
   updateScroll()
 })
 
 onUnmounted(() => {
+  resizeObserver?.disconnect()
+  window.removeEventListener('resize', calculateMaxScroll)
   window.removeEventListener('scroll', updateScroll)
 })
 </script>

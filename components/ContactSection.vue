@@ -26,19 +26,15 @@ const submitForm = async () => {
     const supabase = useSupabaseClient()
     
     // Use a simpler approach without type definitions
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('messages')
       .insert([{
         name: form.value.name,
         email: form.value.email,
         message: form.value.message
       }] as any)
-      .select('id')
 
     if (error) throw error
-    
-    // Log success with message ID
-    console.log('Message inserted with ID:', data[0].id)
     
     // Reset form on success
     form.value = { name: '', email: '', message: '' }
@@ -50,14 +46,14 @@ const submitForm = async () => {
       errorMessage.value = 'Failed to send message. Please try again.'
     }
     
-    // Log error for debugging
-    console.error('Supabase error:', err)
   } finally {
     isSubmitting.value = false
   }
 }
 
 onMounted(async () => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return
+
   await nextTick()
   if (!sectionRef.value) return
   const element: Element = sectionRef.value as Element

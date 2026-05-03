@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -9,7 +9,7 @@ const sectionRef = ref<HTMLElement | null>(null);
 const gridRef = ref<HTMLElement | null>(null);
 
 // Comprehensive skills list using devicon/simpleicons
-const skillCategories = reactive([
+const skillCategories = [
   {
     title: "Frontend & Frameworks",
     skills: [
@@ -102,11 +102,13 @@ const skillCategories = reactive([
       },
     ],
   },
-]);
+];
 
 let ctx: gsap.Context;
 
 onMounted(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return;
+
   // Small delay to ensure all DOM layout and images are calculated before ScrollTrigger initialization
   setTimeout(() => {
     if (!sectionRef.value) return;
@@ -235,6 +237,10 @@ onUnmounted(() => {
                 <img
                   :src="skill.icon"
                   :alt="skill.name"
+                  width="24"
+                  height="24"
+                  loading="lazy"
+                  decoding="async"
                   class="w-full h-full object-contain"
                 />
               </div>

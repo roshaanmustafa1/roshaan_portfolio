@@ -2,23 +2,21 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
+const isEnabled = ref(true)
 let animFrame: number
+let resizeFrame: number
 
 onMounted(() => {
+  if (window.innerWidth < 768) {
+    isEnabled.value = false
+    return
+  }
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const canvas = canvasRef.value
   if (!canvas) return
   const ctx = canvas.getContext('2d')
   if (!ctx) return
-
-  const resize = () => {
-    canvas.width = window.innerWidth
-    canvas.height = document.body.scrollHeight
-  }
-  resize()
-
-  const ro = new ResizeObserver(resize)
-  ro.observe(document.body)
-  window.addEventListener('resize', resize)
 
   const GRID = 48
   interface Dot {
@@ -33,8 +31,11 @@ onMounted(() => {
 
   const buildDots = () => {
     dots = []
-    for (let x = 0; x < canvas.width + GRID; x += GRID) {
-      for (let y = 0; y < canvas.height + GRID; y += GRID) {
+    const width = window.innerWidth
+    const height = document.body.scrollHeight
+
+    for (let x = 0; x < width + GRID; x += GRID) {
+      for (let y = 0; y < height + GRID; y += GRID) {
         dots.push({
           x,
           y,
@@ -46,10 +47,43 @@ onMounted(() => {
     }
   }
 
-  buildDots()
+  const resize = () => {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+    canvas.width = Math.floor(window.innerWidth * dpr)
+    canvas.height = Math.floor(document.body.scrollHeight * dpr)
+    canvas.style.width = `${window.innerWidth}px`
+    canvas.style.height = `${document.body.scrollHeight}px`
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    buildDots()
+  }
+
+  const scheduleResize = () => {
+    if (resizeFrame) cancelAnimationFrame(resizeFrame)
+    resizeFrame = requestAnimationFrame(resize)
+  }
+
+  resize()
+
+  const ro = new ResizeObserver(scheduleResize)
+  ro.observe(document.body)
+  window.addEventListener('resize', scheduleResize)
+
+  let isHidden = document.hidden
+  
+  const handleVisibilityChange = () => {
+    isHidden = document.hidden
+    if (!isHidden && !reduceMotion && window.innerWidth >= 768) {
+      if (animFrame) cancelAnimationFrame(animFrame)
+      draw()
+    }
+  }
+
+  document.addEventListener('visibilitychange', handleVisibilityChange)
 
   let t = 0
   const draw = () => {
+    if (isHidden) return
+
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     t += 0.01
 
@@ -61,21 +95,26 @@ onMounted(() => {
       ctx.fill()
     })
 
-    animFrame = requestAnimationFrame(draw)
+    if (!reduceMotion) {
+      animFrame = requestAnimationFrame(draw)
+    }
   }
 
   draw()
 
   onUnmounted(() => {
-    cancelAnimationFrame(animFrame)
+    if (animFrame) cancelAnimationFrame(animFrame)
+    if (resizeFrame) cancelAnimationFrame(resizeFrame)
     ro.disconnect()
-    window.removeEventListener('resize', resize)
+    window.removeEventListener('resize', scheduleResize)
+    document.removeEventListener('visibilitychange', handleVisibilityChange)
   })
 })
 </script>
 
 <template>
   <canvas
+    v-if="isEnabled"
     ref="canvasRef"
     class="absolute inset-0 w-full h-full pointer-events-none z-0"
     style="opacity: 0.55;"

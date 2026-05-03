@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import gsap from 'gsap'
-import LogoIcon from '@/components/icons/LogoIcon.vue'
 
 const isScrolled = ref(false)
 const isMobileMenuOpen = ref(false)
 const navRef = ref<HTMLElement | null>(null)
 
+let lastScrollTime = 0
+
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
+  const now = Date.now()
+  if (now - lastScrollTime > 100) {
+    isScrolled.value = window.scrollY > 50
+    lastScrollTime = now
+  }
 }
 
 const toggleMobileMenu = () => {
@@ -62,7 +67,8 @@ const animateMenuClose = () => {
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  handleScroll()
   
   // Entrance animation for header elements
   gsap.from('.nav-item', {
@@ -103,7 +109,14 @@ const navLinks = [
     <div class="container mx-auto px-6 md:px-12 flex items-center justify-between">
       
       <NuxtLink to="/" class="nav-item font-black text-2xl tracking-tighter text-white hover:opacity-70 transition-opacity flex items-center gap-1">
-        <img src="/public/Roshaan_Logo_white.svg" class="w-10 text-white fill-white" alt="">
+        <NuxtImg
+          src="/Roshaan_Logo_white.svg"
+          alt="Roshaan Mustafa"
+          width="40"
+          height="40"
+          loading="eager"
+          class="w-10 text-white fill-white"
+        />
       </NuxtLink>
 
       <!-- Desktop Nav -->

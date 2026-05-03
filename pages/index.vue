@@ -10,12 +10,12 @@
     <Navbar />
     
     <HeroSection />
-    <AboutSection />
-    <SkillsSection />
-    <ExperienceSection />
-    <ProjectsSection />
-    <ContactSection />
+    <LazyAboutSection />
+    <LazySkillsSection />
+    <LazyExperienceSection />
+    <LazyProjectsSection />
+    <LazyContactSection />
     
-    <Footer />
+    <LazyFooter />
   </main>
 </template>

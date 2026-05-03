@@ -9,6 +9,8 @@ const sectionRef = ref<HTMLElement | null>(null)
 const colsRef = ref<HTMLElement | null>(null)
 
 onMounted(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return
+
   const ctx = gsap.context(() => {
 
     // Header: clip-path reveal + label slide
@@ -103,7 +105,16 @@ onMounted(() => {
               <span class="text-xs uppercase tracking-widest font-bold font-mono">Insert Portrait</span>
             </div>
             <!-- When the user adds their image, it parallax scrubs internally -->
-            <img src="/public/Roshaan.png" class="about-img w-full h-[120%] -mt-[10%] object-cover grayscale" />
+            <NuxtImg
+              src="/Roshaan.png"
+              alt="Roshaan Mustafa portrait"
+              width="640"
+              height="800"
+              format="webp"
+              quality="75"
+              loading="lazy"
+              class="about-img w-full h-[120%] -mt-[10%] object-cover grayscale"
+            />
           </div>
         </div>
 
