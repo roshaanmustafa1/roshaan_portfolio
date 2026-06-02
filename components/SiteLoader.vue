@@ -176,11 +176,4 @@ defineProps<{
 
 
 
-@media (prefers-reduced-motion: reduce) {
-  .loader-mark::after,
-  .loader-piece {
-    animation: none;
-    transform: none;
-  }
-}
 </style>
