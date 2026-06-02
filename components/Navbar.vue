@@ -102,8 +102,8 @@ const navLinks = [
       'fixed top-0 left-0 right-0 transition-all duration-500',
       isMobileMenuOpen ? 'z-[110]' : 'z-[100]',
       isScrolled 
-        ? 'bg-neutral-950/80 backdrop-blur-md border-b border-white/5 py-4' 
-        : 'bg-transparent py-8'
+        ? 'bg-transparent backdrop-blur-md border-b border-white/5 py-4' 
+        : 'bg-transparent py-4 border-b border-white/5'
     ]"
   >
     <div class="container mx-auto px-6 md:px-12 flex items-center justify-between">

@@ -8,8 +8,19 @@ gsap.registerPlugin(ScrollTrigger);
 const sectionRef = ref<HTMLElement | null>(null);
 const gridRef = ref<HTMLElement | null>(null);
 
+type Skill = {
+  name: string;
+  icon: string;
+  iconClass?: string;
+};
+
+type SkillCategory = {
+  title: string;
+  skills: Skill[];
+};
+
 // Comprehensive skills list using devicon/simpleicons
-const skillCategories = [
+const skillCategories: SkillCategory[] = [
   {
     title: "Frontend & Frameworks",
     skills: [
@@ -99,6 +110,31 @@ const skillCategories = [
       {
         name: "Git",
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
+      },
+    ],
+  },
+  {
+    title: "AI Tools",
+    skills: [
+      {
+        name: "ChatGPT",
+        icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg",
+        iconClass: "brightness-0 invert",
+      },
+      { name: "Claude", icon: "https://cdn.simpleicons.org/claude/white" },
+      {
+        name: "Gemini",
+        icon: "https://cdn.simpleicons.org/googlegemini/white",
+      },
+      { name: "DeepSeek", icon: "https://cdn.simpleicons.org/deepseek/white" },
+      {
+        name: "Codex",
+        icon: "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg",
+        iconClass: "brightness-0 invert",
+      },
+      {
+        name: "GitHub Copilot",
+        icon: "https://cdn.simpleicons.org/githubcopilot/white",
       },
     ],
   },
@@ -212,12 +248,12 @@ onUnmounted(() => {
 
       <div
         ref="gridRef"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-5 xl:gap-6 2xl:gap-8"
       >
         <div
           v-for="category in skillCategories"
           :key="category.title"
-          class="skill-category flex flex-col"
+          class="skill-category flex min-w-0 flex-col"
         >
           <h3
             class="text-sm uppercase tracking-widest text-neutral-400 font-bold mb-6 pb-3 border-b border-white/10"
@@ -229,7 +265,7 @@ onUnmounted(() => {
             <div
               v-for="skill in category.skills"
               :key="skill.name"
-              class="skill-item group flex items-center gap-4 bg-white/5 border border-white/5 rounded-lg px-4 py-3 hover:bg-white/10 hover:border-white/20 transition-all cursor-default"
+              class="skill-item group flex items-center gap-3 bg-white/5 border border-white/5 rounded-lg px-4 py-3 hover:bg-white/10 hover:border-white/20 transition-all cursor-default"
             >
               <div
                 class="w-6 h-6 flex items-center justify-center grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
@@ -242,10 +278,11 @@ onUnmounted(() => {
                   loading="lazy"
                   decoding="async"
                   class="w-full h-full object-contain"
+                  :class="skill.iconClass"
                 />
               </div>
               <span
-                class="text-sm font-bold tracking-wider text-neutral-300 group-hover:text-white transition-colors"
+                class="min-w-0 text-xs 2xl:text-sm font-bold tracking-wider leading-snug text-neutral-300 group-hover:text-white transition-colors"
               >
                 {{ skill.name }}
               </span>

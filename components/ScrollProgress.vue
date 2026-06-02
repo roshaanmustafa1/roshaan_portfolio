@@ -38,7 +38,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 w-full h-1 z-[60] bg-transparent">
+  <div class="fixed top-0 left-0 w-full h-1 z-[130] bg-transparent">
     <div 
       class="h-full bg-primary origin-left transition-all duration-100 ease-out"
       :style="{ width: `${scrollProgress}%` }"

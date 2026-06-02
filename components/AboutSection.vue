@@ -127,7 +127,7 @@ onMounted(() => {
             </h3>
             <div class="w-20 h-1 bg-white/20"></div>
             <p class="text-lg md:text-xl text-neutral-400 font-light leading-relaxed">
-              I am a passionate <strong class="text-white font-normal">Frontend Engineer & Web Designer</strong> driven by the desire to build highly optimized, visually stunning digital experiences. 
+              I am a passionate <strong class="text-white font-normal">AI Powered Frontend Engineer & Web Designer</strong> driven by the desire to build highly optimized, visually stunning digital experiences. 
             </p>
             <p class="text-lg md:text-xl text-neutral-400 font-light leading-relaxed">
               From sophisticated headless React architectures to pixel-perfect WordPress theme developments, my focus remains constant: ensuring blazing-fast performance without compromising on high-end design aesthetics. 

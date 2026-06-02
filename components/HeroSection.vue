@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
+import { Mail, Phone } from "lucide-vue-next";
 import gsap from "gsap";
 
 const sectionRef = ref<HTMLElement | null>(null);
@@ -7,12 +8,12 @@ const magneticWrappers = ref<HTMLElement[]>([]);
 
 // Typewriter
 const roles = [
-  "Frontend Engineer",
-  "UI/UX Designer",
+  "AI Powered Frontend Developer",
+  "React & Vue Js Developer",
   "WordPress Expert",
-  "Vue & React Dev",
+  "Photoshop & Illustrator Designer",
 ];
-const currentRole = ref("Frontend Engineer");
+const currentRole = ref("AI Powered Frontend Developer");
 const isDeleting = ref(false);
 const loopNum = ref(0);
 const typingSpeed = ref(150);
@@ -210,15 +211,19 @@ onUnmounted(() => {
         >
           <a
             href="tel:+923134781894"
-            class="hover:text-neutral-300 transition-colors"
-            >+92 313 4781894</a
+            class="inline-flex items-center gap-2 hover:text-neutral-300 transition-colors"
           >
+            <Phone class="h-3.5 w-3.5" />
+            +92 313 4781894
+          </a>
           <span>·</span>
           <a
             href="mailto:roshaanmustafa1@gmail.com"
-            class="hover:text-neutral-300 transition-colors"
-            >roshaanmustafa1@gmail.com</a
+            class="inline-flex items-center gap-2 hover:text-neutral-300 transition-colors"
           >
+            <Mail class="h-3.5 w-3.5" />
+            roshaanmustafa1@gmail.com
+          </a>
         </div>
       </div>
 
@@ -228,7 +233,7 @@ onUnmounted(() => {
         <div class="hero-label mb-8 flex items-center gap-3">
           <div class="h-[1px] w-12 bg-neutral-600"></div>
           <span
-            class="text-xs md:text-sm font-mono tracking-[0.3em] uppercase text-neutral-500"
+            class="text-xs md:text-lg font-mono tracking-[0.3em] uppercase text-neutral-500"
             >Roshaan Mustafa</span
           >
         </div>
@@ -237,10 +242,10 @@ onUnmounted(() => {
         <div class="flex flex-col gap-0 overflow-hidden">
           <div class="overflow-hidden py-2">
             <h1
-              class="hero-line-1 font-black uppercase tracking-[-0.03em] leading-[0.87] text-white"
-              style="font-size: clamp(2.5rem, 12vw, 8.5rem)"
+              class="hero-line-1 font-black uppercase tracking-[-0.03em] leading-[1.1] text-white"
+              style="font-size: clamp(2.5rem, 12vw, 5.5rem)"
             >
-              Developer
+              Building AI-Powered<br>Web Applications
             </h1>
           </div>
           <div class="overflow-hidden py-2">
@@ -249,10 +254,10 @@ onUnmounted(() => {
               style="
                 color: transparent;
                 -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.25);
-                font-size: clamp(2.5rem, 12vw, 8.5rem);
+                font-size: clamp(2.5rem, 12vw, 5.5rem);
               "
             >
-              & Designer.
+              & Wordpress Expert
             </h1>
           </div>
         </div>
@@ -272,7 +277,7 @@ onUnmounted(() => {
               <span class="text-neutral-600 text-xs flex-shrink-0">[</span>
 
               <span class="inline-block min-w-[18ch] whitespace-nowrap">
-                {{ currentRole || "Frontend Engineer" }}
+                {{ currentRole || "AI Powered Frontend Developer" }}
               </span>
 
               <span
@@ -283,11 +288,14 @@ onUnmounted(() => {
             <p
               class="hero-meta text-neutral-500 text-sm md:text-base font-light leading-relaxed"
             >
-              Passioned about the intersection of
-              <span class="text-neutral-300">elegant UI</span> and
-              <span class="text-neutral-300">high-performance code</span>.
-              Building exceptional web experiences with Vue, React & WordPress
-              since 2020.
+              Passionate about building
+              <span class="text-neutral-300">AI-powered applications</span>,
+              <span class="text-neutral-300">intelligent workflows</span>, and
+              <span class="text-neutral-300">modern digital products</span> that
+              combine software engineering, automation, and exceptional user
+              experiences using 
+              <span class="text-neutral-300">React, Vue, WordPress, and emerging AI
+              technologies.</span>
             </p>
           </div>
 
@@ -369,13 +377,3 @@ onUnmounted(() => {
     </div>
   </section>
 </template>
-
-<style scoped>
-.bg-radial-vignette {
-  background: radial-gradient(
-    ellipse at 50% 50%,
-    transparent 40%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-}
-</style>
