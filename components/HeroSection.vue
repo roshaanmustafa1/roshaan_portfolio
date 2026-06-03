@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { Mail, Phone } from "lucide-vue-next";
+import { Download, Mail, Phone } from "lucide-vue-next";
 import gsap from "gsap";
 
 const sectionRef = ref<HTMLElement | null>(null);
@@ -300,7 +300,7 @@ onUnmounted(() => {
           </div>
 
           <!-- Right: CTA Buttons -->
-          <div class="flex items-center gap-5 flex-shrink-0">
+          <div class="flex flex-wrap items-center gap-3 sm:gap-5 flex-shrink-0">
             <div
               class="relative inline-block p-5 -m-5 cursor-pointer"
               :ref="
@@ -339,24 +339,15 @@ onUnmounted(() => {
               "
             >
               <a
-                href="#contact"
+                href="/roshaan-frontend-dev-ai.pdf"
+                download="roshaan-frontend-dev-ai.pdf"
                 class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-transparent border border-white/20 text-white rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-white/5 transition-colors group"
               >
-                Hire Me
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  class="group-hover:rotate-45 transition-transform duration-300"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M7 17L17 7" />
-                  <path d="M7 7h10v10" />
-                </svg>
+                Download Resume
+                <Download
+                  class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5"
+                  :stroke-width="2.5"
+                />
               </a>
             </div>
           </div>
