@@ -9,7 +9,7 @@ const sectionRef = ref<HTMLElement | null>(null)
 const colsRef = ref<HTMLElement | null>(null)
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
   const ctx = gsap.context(() => {
 

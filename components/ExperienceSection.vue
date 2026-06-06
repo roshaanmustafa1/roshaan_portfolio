@@ -75,7 +75,7 @@ onMounted(async () => {
   await nextTick();
 
   const shouldReduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce), (max-width: 767px)",
+    "(prefers-reduced-motion: reduce)",
   ).matches;
 
   if (shouldReduceMotion || !sectionRef.value) {

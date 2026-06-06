@@ -128,7 +128,7 @@ let headerCtx: gsap.Context
 let itemsCtx: gsap.Context
 
 const initItemsAnimation = () => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 1024px)').matches) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
   if (itemsCtx) itemsCtx.revert()
   
   itemsCtx = gsap.context(() => {
@@ -194,7 +194,7 @@ const setFilter = async (cat: string) => {
 }
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 1024px)').matches) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
   headerCtx = gsap.context(() => {
     // Label slides in from left

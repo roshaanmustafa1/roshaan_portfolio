@@ -52,7 +52,7 @@ const submitForm = async () => {
 }
 
 onMounted(async () => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
   await nextTick()
   if (!sectionRef.value) return

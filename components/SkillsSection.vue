@@ -12,7 +12,7 @@ const gridRef = ref<HTMLElement | null>(null);
 let ctx: gsap.Context;
 
 onMounted(() => {
-  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 767px)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   // Small delay to ensure all DOM layout and images are calculated before ScrollTrigger initialization
   setTimeout(() => {

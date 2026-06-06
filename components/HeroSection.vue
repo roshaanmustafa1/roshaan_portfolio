@@ -50,8 +50,7 @@ let typingInterval: ReturnType<typeof setTimeout> | null = null;
 let ctx: gsap.Context | null = null;
 let prefersReducedMotion = false;
 
-const isMobileViewport = () => window.matchMedia("(max-width: 767px)").matches;
-
+// Mobile viewport check removed to allow animations on all devices
 const clearTypingTimer = () => {
   if (typingInterval) {
     clearTimeout(typingInterval);
@@ -130,7 +129,7 @@ onMounted(() => {
 
   type();
 
-  if (!sectionRef.value || isMobileViewport()) return;
+  if (!sectionRef.value) return;
 
   ctx = gsap.context(() => {
     const tl = gsap.timeline({
@@ -486,58 +485,6 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
-  .hero-badge,
-  .hero-label,
-  .hero-line-1,
-  .hero-line-2,
-  .hero-meta,
-  .hero-skill-slider,
-  .hero-cta {
-    animation: hero-mobile-reveal 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    will-change: opacity, transform;
-  }
-
-  .hero-badge {
-    animation-delay: 80ms;
-  }
-
-  .hero-label {
-    animation-delay: 160ms;
-  }
-
-  .hero-line-1 {
-    animation-delay: 240ms;
-  }
-
-  .hero-line-2 {
-    animation-delay: 340ms;
-  }
-
-  .hero-meta {
-    animation-delay: 430ms;
-  }
-
-  .hero-skill-slider {
-    animation-delay: 560ms;
-  }
-
-  .hero-cta {
-    animation-delay: 650ms;
-  }
-}
-
-@keyframes hero-mobile-reveal {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 24px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .hero-logo-track {
