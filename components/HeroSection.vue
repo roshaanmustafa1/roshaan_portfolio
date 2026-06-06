@@ -123,9 +123,7 @@ const handleMagneticLeave = (element: HTMLElement) => {
 };
 
 onMounted(() => {
-  prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
+  prefersReducedMotion = false;
 
   type();
 
@@ -486,9 +484,5 @@ onUnmounted(() => {
 }
 
 
-@media (prefers-reduced-motion: reduce) {
-  .hero-logo-track {
-    animation: none !important;
-  }
-}
+
 </style>

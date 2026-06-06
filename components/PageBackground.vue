@@ -12,7 +12,7 @@ onMounted(() => {
     return
   }
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reduceMotion = false
   const canvas = canvasRef.value
   if (!canvas) return
   const ctx = canvas.getContext('2d')

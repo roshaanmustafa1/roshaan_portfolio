@@ -74,11 +74,7 @@ const certificates = [
 onMounted(async () => {
   await nextTick();
 
-  const shouldReduceMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-
-  if (shouldReduceMotion || !sectionRef.value) {
+  if (!sectionRef.value) {
     ScrollTrigger.refresh();
     return;
   }
