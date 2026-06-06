@@ -332,7 +332,7 @@ onUnmounted(() => {
           >
             <div class="hero-skill-slider w-full max-w-full lg:w-[600px]">
               <div
-                class="relative overflow-hidden border-y border-white/10 py-3 [mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)]"
+                class="hero-logo-mask relative overflow-hidden border-y border-white/10 py-3"
               >
                 <div class="hero-logo-track flex w-max items-center">
                   <div class="flex shrink-0 items-center gap-3 pr-3">
@@ -452,19 +452,46 @@ onUnmounted(() => {
 <style scoped>
 .hero-logo-track {
   animation: hero-logo-marquee 28s linear infinite;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
 }
 
-.hero-skill-slider:hover .hero-logo-track {
-  animation-play-state: paused;
+.hero-logo-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 14%,
+    black 86%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 14%,
+    black 86%,
+    transparent
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-skill-slider:hover .hero-logo-track {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes hero-logo-marquee {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-logo-track {
+    animation-duration: 18s;
   }
 }
 
