@@ -228,7 +228,7 @@ onUnmounted(() => {
     <!-- Section glow -->
     <div class="absolute top-0 left-0 w-[400px] h-[400px] bg-indigo-900/10 rounded-full blur-[100px] pointer-events-none"></div>
     
-    <div class="container mx-auto px-6 md:px-12 relative z-10 max-w-[1400px]">
+    <div class="container mx-auto px-6 md:px-12 relative z-10 max-w-[1920px]">
       <div class="proj-header mb-16 md:mb-24 flex flex-col md:flex-row justify-between items-end gap-8">
         <div>
           <span class="proj-label text-neutral-500 uppercase tracking-[0.2em] text-xs font-bold mb-4 block">04 — Selected Works</span>
