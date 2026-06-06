@@ -27,6 +27,13 @@ const skillLogos = heroSkillNames.flatMap((name) => {
   return skill ? [skill] : [];
 });
 
+// Safe Ref Collector (Prevents duplicate entries on mobile re-renders)
+const setMagneticRef = (el: any) => {
+  if (el && !magneticWrappers.value.includes(el)) {
+    magneticWrappers.value.push(el as HTMLElement);
+  }
+};
+
 // Typewriter
 const roles = [
   "AI Powered Frontend Developer",
@@ -198,12 +205,10 @@ onUnmounted(() => {
     id="home"
     class="relative min-h-screen flex flex-col bg-transparent text-white overflow-hidden select-none"
   >
-    <!-- Deep vignette to focus content, sits above global canvas -->
     <div
       class="absolute inset-0 z-0 bg-radial-vignette pointer-events-none"
     ></div>
 
-    <!-- Subtle glow source top-left -->
     <div
       class="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-indigo-900/20 blur-[120px] pointer-events-none z-0"
     ></div>
@@ -211,11 +216,9 @@ onUnmounted(() => {
       class="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-violet-900/10 blur-[100px] pointer-events-none z-0"
     ></div>
 
-    <!-- Content wrapper — same container as all sections -->
     <div
       class="relative z-10 container mx-auto px-6 md:px-12 flex flex-col min-h-screen"
     >
-      <!-- Top Status Bar -->
       <div
         class="hero-badge flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-32 pb-10 border-b border-white/10"
       >
@@ -234,7 +237,7 @@ onUnmounted(() => {
           >
         </div>
         <div
-          class="flex gap-6 text-xs font-mono tracking-widest text-neutral-600"
+          class="flex flex-wrap lg:gap-6 gap-4 md:mt-0 mt-4 text-xs font-mono tracking-widest text-neutral-600"
         >
           <a
             href="tel:+923134781894"
@@ -254,9 +257,7 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- Main Content — vertically centered -->
-      <div class="flex-grow flex flex-col justify-center py-16 md:py-18">
-        <!-- Sub-label -->
+      <div class="flex-grow flex flex-col justify-center py-10 md:py-18">
         <div class="hero-label mb-8 flex items-center gap-3">
           <div class="h-[1px] w-12 bg-neutral-600"></div>
           <span
@@ -265,7 +266,6 @@ onUnmounted(() => {
           >
         </div>
 
-        <!-- Massive typography block -->
         <div class="flex flex-col gap-0 overflow-hidden">
           <div class="overflow-hidden py-2">
             <h1
@@ -289,14 +289,11 @@ onUnmounted(() => {
           </div>
         </div>
 
-        <!-- Divider line -->
         <div class="hero-meta w-full h-[1px] bg-white/10 my-10"></div>
 
-        <!-- Bottom info row -->
         <div
           class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10"
         >
-          <!-- Left: Typewriter + Description -->
           <div class="flex flex-col gap-4 max-w-lg">
             <div
               class="hero-meta flex items-center gap-3 font-mono text-sm md:text-base text-neutral-300 min-h-[24px]"
@@ -326,7 +323,6 @@ onUnmounted(() => {
             </p>
           </div>
 
-          <!-- Right: Skill logos + CTA Buttons -->
           <div
             class="flex w-full flex-shrink-0 flex-col items-start gap-5 lg:w-auto lg:items-end"
           >
@@ -334,8 +330,8 @@ onUnmounted(() => {
               <div
                 class="hero-logo-mask relative overflow-hidden border-y border-white/10 py-3"
               >
-                <div class="hero-logo-track flex w-max items-center">
-                  <div class="flex shrink-0 items-center gap-3 pr-3">
+                <div class="hero-logo-track flex flex-nowrap w-max items-center">
+                  <div class="flex shrink-0 items-center gap-3 pr-3 flex-nowrap">
                     <div
                       v-for="skill in skillLogos"
                       :key="`hero-logo-${skill.name}`"
@@ -355,7 +351,7 @@ onUnmounted(() => {
                   </div>
 
                   <div
-                    class="flex shrink-0 items-center gap-3 pr-3"
+                    class="flex shrink-0 items-center gap-3 pr-3 flex-nowrap"
                     aria-hidden="true"
                   >
                     <div
@@ -382,11 +378,7 @@ onUnmounted(() => {
             <div class="flex flex-wrap items-center gap-3 sm:gap-5">
               <div
                 class="relative inline-block p-5 -m-5 cursor-pointer"
-                :ref="
-                  (el) => {
-                    if (el) magneticWrappers.push(el as HTMLElement);
-                  }
-                "
+                :ref="setMagneticRef"
               >
                 <a
                   href="#projects"
@@ -411,11 +403,7 @@ onUnmounted(() => {
               </div>
               <div
                 class="relative inline-block p-5 -m-5 cursor-pointer"
-                :ref="
-                  (el) => {
-                    if (el) magneticWrappers.push(el as HTMLElement);
-                  }
-                "
+                :ref="setMagneticRef"
               >
                 <a
                   href="/roshaan-frontend-dev-ai.pdf"
@@ -434,7 +422,6 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- Bottom scroll hint -->
       <div class="hero-meta flex justify-center pb-10">
         <div
           class="flex flex-col items-center gap-2 text-neutral-700 opacity-60"
@@ -451,9 +438,10 @@ onUnmounted(() => {
 
 <style scoped>
 .hero-logo-track {
-  animation: hero-logo-marquee 28s linear infinite;
-  transform: translate3d(0, 0, 0);
+  display: flex;
+  width: max-content;
   will-change: transform;
+  animation: hero-logo-marquee 25s linear infinite;
 }
 
 .hero-logo-mask {
@@ -479,25 +467,26 @@ onUnmounted(() => {
   }
 }
 
+/* Fixed Hardware Acceleration for Mobile & Safari browsers */
 @keyframes hero-logo-marquee {
-  from {
-    transform: translate3d(0, 0, 0);
+  0% {
+    transform: translateZ(0);
   }
-
-  to {
+  100% {
     transform: translate3d(-50%, 0, 0);
   }
 }
 
+/* Mobile smooth animation speed adjustment */
 @media (max-width: 767px) {
   .hero-logo-track {
-    animation-duration: 18s;
+    animation: hero-logo-marquee 16s linear infinite;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-logo-track {
-    animation: none;
+    animation: none !important;
   }
 }
 </style>
