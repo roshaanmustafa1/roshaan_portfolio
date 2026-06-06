@@ -2,9 +2,30 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { Download, Mail, Phone } from "lucide-vue-next";
 import gsap from "gsap";
+import { skills } from "@/utils/skills";
 
 const sectionRef = ref<HTMLElement | null>(null);
 const magneticWrappers = ref<HTMLElement[]>([]);
+const heroSkillNames = [
+  "React.js",
+  "Vue.js",
+  "Nuxt 3",
+  "Next.js",
+  "Tailwind CSS",
+  "JavaScript",
+  "TypeScript",
+  "Node.js",
+  "MongoDB",
+  "WordPress",
+  "Figma",
+  "Git",
+  "ChatGPT",
+];
+const skillLogosByName = new Map(skills.map((skill) => [skill.name, skill]));
+const skillLogos = heroSkillNames.flatMap((name) => {
+  const skill = skillLogosByName.get(name);
+  return skill ? [skill] : [];
+});
 
 // Typewriter
 const roles = [
@@ -138,6 +159,12 @@ onMounted(() => {
         "-=0.6",
       )
       .fromTo(
+        ".hero-skill-slider",
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        "-=0.45",
+      )
+      .fromTo(
         ".hero-cta",
         { opacity: 0, scale: 0.9 },
         { opacity: 1, scale: 1, duration: 0.7, stagger: 0.1 },
@@ -228,7 +255,7 @@ onUnmounted(() => {
       </div>
 
       <!-- Main Content — vertically centered -->
-      <div class="flex-grow flex flex-col justify-center py-16 md:py-24">
+      <div class="flex-grow flex flex-col justify-center py-16 md:py-18">
         <!-- Sub-label -->
         <div class="hero-label mb-8 flex items-center gap-3">
           <div class="h-[1px] w-12 bg-neutral-600"></div>
@@ -299,56 +326,109 @@ onUnmounted(() => {
             </p>
           </div>
 
-          <!-- Right: CTA Buttons -->
-          <div class="flex flex-wrap items-center gap-3 sm:gap-5 flex-shrink-0">
-            <div
-              class="relative inline-block p-5 -m-5 cursor-pointer"
-              :ref="
-                (el) => {
-                  if (el) magneticWrappers.push(el as HTMLElement);
-                }
-              "
-            >
-              <a
-                href="#projects"
-                class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-white text-black rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-neutral-100 transition-colors group"
+          <!-- Right: Skill logos + CTA Buttons -->
+          <div
+            class="flex w-full flex-shrink-0 flex-col items-start gap-5 lg:w-auto lg:items-end"
+          >
+            <div class="hero-skill-slider w-full max-w-full lg:w-[600px]">
+              <div
+                class="relative overflow-hidden border-y border-white/10 py-3 [mask-image:linear-gradient(to_right,transparent,black_14%,black_86%,transparent)]"
               >
-                View Work
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  class="group-hover:translate-x-1 transition-transform"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </a>
+                <div class="hero-logo-track flex w-max items-center">
+                  <div class="flex shrink-0 items-center gap-3 pr-3">
+                    <div
+                      v-for="skill in skillLogos"
+                      :key="`hero-logo-${skill.name}`"
+                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 p-2 backdrop-blur-sm"
+                    >
+                      <img
+                        :src="skill.icon"
+                        :alt="skill.name"
+                        width="28"
+                        height="28"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-7 w-7 object-contain grayscale opacity-80 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
+                        :class="skill.iconClass"
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    class="flex shrink-0 items-center gap-3 pr-3"
+                    aria-hidden="true"
+                  >
+                    <div
+                      v-for="skill in skillLogos"
+                      :key="`hero-logo-clone-${skill.name}`"
+                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 p-2 backdrop-blur-sm"
+                    >
+                      <img
+                        :src="skill.icon"
+                        alt=""
+                        width="28"
+                        height="28"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-7 w-7 object-contain grayscale opacity-80 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
+                        :class="skill.iconClass"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div
-              class="relative inline-block p-5 -m-5 cursor-pointer"
-              :ref="
-                (el) => {
-                  if (el) magneticWrappers.push(el as HTMLElement);
-                }
-              "
-            >
-              <a
-                href="/roshaan-frontend-dev-ai.pdf"
-                download="roshaan-frontend-dev-ai.pdf"
-                class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-transparent border border-white/20 text-white rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-white/5 transition-colors group"
+
+            <div class="flex flex-wrap items-center gap-3 sm:gap-5">
+              <div
+                class="relative inline-block p-5 -m-5 cursor-pointer"
+                :ref="
+                  (el) => {
+                    if (el) magneticWrappers.push(el as HTMLElement);
+                  }
+                "
               >
-                Download Resume
-                <Download
-                  class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5"
-                  :stroke-width="2.5"
-                />
-              </a>
+                <a
+                  href="#projects"
+                  class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-white text-black rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-neutral-100 transition-colors group"
+                >
+                  View Work
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    class="group-hover:translate-x-1 transition-transform"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </a>
+              </div>
+              <div
+                class="relative inline-block p-5 -m-5 cursor-pointer"
+                :ref="
+                  (el) => {
+                    if (el) magneticWrappers.push(el as HTMLElement);
+                  }
+                "
+              >
+                <a
+                  href="/roshaan-frontend-dev-ai.pdf"
+                  download="roshaan-frontend-dev-ai.pdf"
+                  class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-transparent border border-white/20 text-white rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-white/5 transition-colors group"
+                >
+                  Download Resume
+                  <Download
+                    class="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-y-0.5"
+                    :stroke-width="2.5"
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -368,3 +448,29 @@ onUnmounted(() => {
     </div>
   </section>
 </template>
+
+<style scoped>
+.hero-logo-track {
+  animation: hero-logo-marquee 28s linear infinite;
+}
+
+.hero-skill-slider:hover .hero-logo-track {
+  animation-play-state: paused;
+}
+
+@keyframes hero-logo-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-track {
+    animation: none;
+  }
+}
+</style>
