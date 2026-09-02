@@ -106,6 +106,20 @@ const projects = [
     category: 'WordPress',
     image: '/Projects/wsl_consultant.png',
     link: 'https://wslconsultant.com'
+  },
+  {
+    id: 15,
+    title: 'ARM Cont',
+    category: 'Corporate / WordPress',
+    image: '/Projects/arm_cont.png',
+    link: 'https://armcont.com/'
+  },
+  {
+    id: 16,
+    title: 'Refine Global Services',
+    category: 'Next.js / React',
+    image: '/Projects/refine_global_services.png',
+    link: 'https://refine-global-services.vercel.app/'
   }
 ]
 
