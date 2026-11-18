@@ -11,21 +11,19 @@ let cursorFrame = 0
 let mouseX = 0
 let mouseY = 0
 
+let dotX: ((v: number) => void) | null = null
+let dotY: ((v: number) => void) | null = null
+let ringX: ((v: number) => void) | null = null
+let ringY: ((v: number) => void) | null = null
+
 const moveCursor = () => {
   cursorFrame = 0
 
-  gsap.to(dot.value, {
-    x: mouseX,
-    y: mouseY,
-    duration: 0,
-  })
-
-  gsap.to(cursor.value, {
-    x: mouseX,
-    y: mouseY,
-    duration: 0.15,
-    ease: 'power2.out'
-  })
+  // quickTo reuses one tween per property instead of creating new tweens each frame
+  dotX?.(mouseX)
+  dotY?.(mouseY)
+  ringX?.(mouseX)
+  ringY?.(mouseY)
 }
 
 const updateCursor = (e: MouseEvent) => {
@@ -70,6 +68,10 @@ onMounted(() => {
   
   // Initially center and reveal
   gsap.set([cursor.value, dot.value], { x: window.innerWidth / 2, y: window.innerHeight / 2, opacity: 0 })
+  dotX = gsap.quickSetter(dot.value, 'x', 'px') as (v: number) => void
+  dotY = gsap.quickSetter(dot.value, 'y', 'px') as (v: number) => void
+  ringX = gsap.quickTo(cursor.value, 'x', { duration: 0.15, ease: 'power2.out' })
+  ringY = gsap.quickTo(cursor.value, 'y', { duration: 0.15, ease: 'power2.out' })
   window.addEventListener('mousemove', () => {
     gsap.to([cursor.value, dot.value], { opacity: 1, duration: 0.5 })
   }, { once: true })

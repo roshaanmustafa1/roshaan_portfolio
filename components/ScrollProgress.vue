@@ -40,8 +40,8 @@ onUnmounted(() => {
 <template>
   <div class="fixed top-0 left-0 w-full h-1 z-[130] bg-transparent">
     <div 
-      class="h-full bg-primary origin-left transition-all duration-100 ease-out"
-      :style="{ width: `${scrollProgress}%` }"
+      class="h-full w-full bg-primary origin-left will-change-transform"
+      :style="{ transform: `scaleX(${scrollProgress / 100})` }"
     ></div>
   </div>
 </template>

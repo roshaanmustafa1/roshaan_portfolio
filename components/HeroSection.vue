@@ -22,6 +22,10 @@ const heroSkillNames = [
   "ChatGPT",
 ];
 const skillLogosByName = new Map(skills.map((skill) => [skill.name, skill]));
+const portraitLogos = ["React.js", "Vue.js", "Next.js"].flatMap((name) => {
+  const skill = skillLogosByName.get(name);
+  return skill ? [skill] : [];
+});
 const skillLogos = heroSkillNames.flatMap((name) => {
   const skill = skillLogosByName.get(name);
   return skill ? [skill] : [];
@@ -36,12 +40,12 @@ const setMagneticRef = (el: any) => {
 
 // Typewriter
 const roles = [
-  "AI Powered Frontend Developer",
-  "React & Vue Js Developer",
-  "WordPress Expert",
+  "AI-Powered Frontend Engineer",
+  "React & Vue.js Specialist",
+  "Building Next-Gen AI Web Apps",
   "Photoshop & Illustrator Designer",
 ];
-const currentRole = ref("AI Powered Frontend Developer");
+const currentRole = ref("AI-Powered Frontend Engineer");
 const isDeleting = ref(false);
 const loopNum = ref(0);
 const typingSpeed = ref(150);
@@ -141,16 +145,10 @@ onMounted(() => {
       { opacity: 1, y: 0, duration: 0.8 },
     )
       .fromTo(
-        ".hero-label",
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        "-=0.3",
-      )
-      .fromTo(
         ".hero-line-1",
         { y: 130, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.3 },
-        "-=0.5",
+        "-=0.4",
       )
       .fromTo(
         ".hero-line-2",
@@ -176,6 +174,13 @@ onMounted(() => {
         { opacity: 1, scale: 1, duration: 0.7, stagger: 0.1 },
         "-=0.5",
       );
+
+    tl.fromTo(
+      ".hero-portrait",
+      { opacity: 0, y: 50, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 1.3, ease: "power4.out" },
+      0.5,
+    );
 
     magneticWrappers.value.forEach((wrapper) => {
       wrapper.addEventListener(
@@ -256,20 +261,15 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="flex-grow flex flex-col justify-center py-10 md:py-18">
-        <div class="hero-label mb-8 flex items-center gap-3">
-          <div class="h-[1px] w-12 bg-neutral-600"></div>
-          <span
-            class="text-xs md:text-lg font-mono tracking-[0.3em] uppercase text-neutral-500"
-            >Roshaan Mustafa</span
-          >
-        </div>
+      <div class="flex-grow grid grid-cols-1 lg:grid-cols-12 items-center gap-14 lg:gap-8 py-10 md:py-14">
+      <!-- Left: content -->
+      <div class="lg:col-span-7 min-w-0 flex flex-col justify-center">
 
         <div class="flex flex-col gap-0 overflow-hidden">
           <div class="overflow-hidden py-2">
             <h1
               class="hero-line-1 font-black uppercase tracking-[-0.03em] leading-[1.1] text-white"
-              style="font-size: clamp(2.5rem, 12vw, 5.5rem)"
+              style="font-size: clamp(2.1rem, 9vw, 3.6rem)"
             >
               Building AI-Powered<br>Web Applications
             </h1>
@@ -280,10 +280,10 @@ onUnmounted(() => {
               style="
                 color: transparent;
                 -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.25);
-                font-size: clamp(2.5rem, 12vw, 5.5rem);
+                font-size: clamp(2.1rem, 9vw, 3.6rem);
               "
             >
-              & Wordpress Expert
+              & Next-Gen AI Platforms
             </h1>
           </div>
         </div>
@@ -291,7 +291,7 @@ onUnmounted(() => {
         <div class="hero-meta w-full h-[1px] bg-white/10 my-10"></div>
 
         <div
-          class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10"
+          class="flex flex-col gap-8"
         >
           <div class="flex flex-col gap-4 max-w-lg">
             <div
@@ -300,7 +300,7 @@ onUnmounted(() => {
               <span class="text-neutral-600 text-xs flex-shrink-0">[</span>
 
               <span class="inline-block min-w-[18ch] whitespace-nowrap">
-                {{ currentRole || "AI Powered Frontend Developer" }}
+                {{ currentRole || "AI-Powered Frontend Engineer" }}
               </span>
 
               <span
@@ -317,15 +317,15 @@ onUnmounted(() => {
               <span class="text-neutral-300">modern digital products</span> that
               combine software engineering, automation, and exceptional user
               experiences using 
-              <span class="text-neutral-300">React, Vue, WordPress, and emerging AI
+              <span class="text-neutral-300">React, Vue, Next.js, and emerging AI
               technologies.</span>
             </p>
           </div>
 
           <div
-            class="flex w-full flex-shrink-0 flex-col items-start gap-5 lg:w-auto lg:items-end"
+            class="flex w-full flex-shrink-0 flex-col items-start gap-5"
           >
-            <div class="hero-skill-slider w-full max-w-full lg:w-[600px]">
+            <div class="hero-skill-slider w-full max-w-full lg:max-w-[560px]">
               <div
                 class="hero-logo-mask relative overflow-hidden border-y border-white/10 py-3"
               >
@@ -334,7 +334,7 @@ onUnmounted(() => {
                     <div
                       v-for="skill in skillLogos"
                       :key="`hero-logo-${skill.name}`"
-                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 p-2 backdrop-blur-sm"
+                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 p-2"
                     >
                       <img
                         :src="skill.icon"
@@ -343,7 +343,7 @@ onUnmounted(() => {
                         height="28"
                         loading="lazy"
                         decoding="async"
-                        class="h-7 w-7 object-contain grayscale opacity-80 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
+                        class="h-7 w-7 object-contain"
                         :class="skill.iconClass"
                       />
                     </div>
@@ -356,7 +356,7 @@ onUnmounted(() => {
                     <div
                       v-for="skill in skillLogos"
                       :key="`hero-logo-clone-${skill.name}`"
-                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 p-2 backdrop-blur-sm"
+                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/5 p-2"
                     >
                       <img
                         :src="skill.icon"
@@ -365,7 +365,7 @@ onUnmounted(() => {
                         height="28"
                         loading="lazy"
                         decoding="async"
-                        class="h-7 w-7 object-contain grayscale opacity-80 transition-all duration-300 hover:grayscale-0 hover:opacity-100"
+                        class="h-7 w-7 object-contain"
                         :class="skill.iconClass"
                       />
                     </div>
@@ -405,8 +405,8 @@ onUnmounted(() => {
                 :ref="setMagneticRef"
               >
                 <a
-                  href="/roshaan-frontend-dev-ai.pdf"
-                  download="roshaan-frontend-dev-ai.pdf"
+                  href="/roshaan-mustafa-resume.pdf"
+                  download="roshaan-mustafa-resume.pdf"
                   class="hero-cta inline-flex items-center gap-3 px-4 py-3 md:py-4 md:px-8 bg-transparent border border-white/20 text-white rounded-full font-bold uppercase tracking-[0.15em] text-xs hover:bg-white/5 transition-colors group"
                 >
                   Download Resume
@@ -421,15 +421,98 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <div class="hero-meta flex justify-center pb-10">
-        <div
-          class="flex flex-col items-center gap-2 text-neutral-700 opacity-60"
-        >
-          <span class="text-[9px] uppercase tracking-[0.3em] font-mono"
-            >Scroll</span
-          >
-          <div class="w-[1px] h-10 bg-neutral-700 animate-pulse"></div>
+      <!-- Right: arch profile card -->
+      <div class="lg:col-span-5 relative flex items-center justify-center">
+        <div class="hero-portrait relative mx-auto w-full max-w-[330px] sm:max-w-[390px] lg:max-w-[430px]">
+          <!-- Soft glow behind the card -->
+          <div class="absolute -inset-6 rounded-full bg-gradient-to-tr from-indigo-600/25 via-violet-500/10 to-transparent blur-3xl pointer-events-none"></div>
+
+          <!-- Arch plate -->
+          <div class="hero-plate relative aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-[2rem] border border-white/15">
+            <!-- Outlined monogram -->
+            <span
+              aria-hidden="true"
+              class="absolute left-1/2 top-[10%] -translate-x-1/2 select-none font-black leading-none tracking-tighter"
+              style="font-size: clamp(7rem, 20vw, 11rem); color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.14)"
+            >RM</span>
+
+            <!-- Photo -->
+            <NuxtImg
+              src="/Roshaan-nobg.webp"
+              alt="Roshaan Mustafa"
+              width="600"
+              height="600"
+              format="webp"
+              quality="90"
+              loading="eager"
+              class="hero-photo absolute bottom-0 left-1/2 z-10 h-auto w-[118%] max-w-none -translate-x-1/2"
+            />
+
+            <!-- Name plate -->
+            <div class="absolute inset-x-0 bottom-0 z-20 bg-gradient-to-t from-black/85 via-black/50 to-transparent px-6 pb-5 pt-16 text-center">
+              <div class="text-lg font-black uppercase tracking-tight">Roshaan Mustafa</div>
+              <div class="mt-0.5 font-mono text-[11px] tracking-wide text-neutral-400">
+                <span class="text-violet-300">const</span> role = <span class="text-emerald-300">'Frontend Engineer'</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="hero-float absolute -left-3 top-[20%] z-30 rounded-2xl border border-white/10 bg-neutral-950/90 px-4 py-3 shadow-xl sm:-left-8">
+            <div class="text-2xl font-black tracking-tighter leading-none">3+</div>
+            <div class="mt-1 text-[10px] font-bold uppercase tracking-widest text-neutral-500">Years Exp.</div>
+          </div>
+          <div class="hero-float hero-float-delay absolute -right-3 top-[44%] z-30 rounded-2xl border border-white/10 bg-neutral-950/90 px-4 py-3 shadow-xl sm:-right-8">
+            <div class="text-2xl font-black tracking-tighter leading-none">30+</div>
+            <div class="mt-1 text-[10px] font-bold uppercase tracking-widest text-neutral-500">Projects</div>
+          </div>
+
+          <!-- Tech badges -->
+          <div class="absolute -top-2 right-[10%] z-30 flex gap-2">
+            <span
+              v-for="(logo, i) in portraitLogos"
+              :key="logo.name"
+              class="hero-float flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-neutral-950/90 p-2.5 shadow-lg"
+              :style="{ animationDelay: `-${i * 1.2}s` }"
+              :title="logo.name"
+            >
+              <img :src="logo.icon" :alt="logo.name" width="24" height="24" class="h-full w-full object-contain" :class="logo.iconClass" />
+            </span>
+          </div>
+
+          <!-- Open to work -->
+          <div class="hero-float absolute -bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-neutral-950/95 px-4 py-2 shadow-xl">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-green-500"></span>
+            </span>
+            <span class="font-mono text-[11px] text-neutral-200">open to work</span>
+          </div>
         </div>
+      </div>
+      </div>
+
+      <div class="hero-meta flex justify-center pb-10">
+        <a
+          href="#about"
+          aria-label="Scroll down"
+          class="group flex flex-col items-center gap-3 text-neutral-300 hover:text-white transition-colors"
+        >
+          <div class="scroll-bounce flex flex-col items-center gap-3">
+            <span class="text-[11px] md:text-xs font-bold uppercase tracking-[0.35em] font-mono">Scroll</span>
+
+            <!-- Mouse icon -->
+            <span class="relative flex h-11 w-7 justify-center rounded-full border-2 border-white/50 group-hover:border-white transition-colors">
+              <span class="scroll-wheel mt-2 h-2 w-1 rounded-full bg-white"></span>
+            </span>
+
+            <!-- Chevrons -->
+            <span class="flex flex-col items-center -space-y-2">
+              <svg class="scroll-chevron h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+              <svg class="scroll-chevron scroll-chevron-delay h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+            </span>
+          </div>
+        </a>
       </div>
     </div>
   </section>
@@ -474,6 +557,60 @@ onUnmounted(() => {
   100% {
     transform: translate3d(-50%, 0, 0);
   }
+}
+
+/* Portrait: floating chips + plate */
+.hero-plate {
+  background:
+    radial-gradient(circle at 50% 28%, rgba(129, 140, 248, 0.35), transparent 55%),
+    radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px) 0 0 / 22px 22px,
+    linear-gradient(180deg, rgba(99, 102, 241, 0.22), rgba(24, 24, 27, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+}
+.hero-photo {
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+}
+/* Scroll indicator: continuous up/down motion */
+.scroll-bounce {
+  animation: scroll-bounce 1.8s ease-in-out infinite;
+  will-change: transform;
+}
+.scroll-wheel {
+  animation: scroll-wheel 1.8s ease-in-out infinite;
+}
+.scroll-chevron {
+  animation: scroll-chevron 1.8s ease-in-out infinite;
+}
+.scroll-chevron-delay {
+  animation-delay: 0.25s;
+}
+@keyframes scroll-bounce {
+  0%, 100% { transform: translate3d(0, -4px, 0); }
+  50% { transform: translate3d(0, 10px, 0); }
+}
+@keyframes scroll-wheel {
+  0% { opacity: 0; transform: translate3d(0, 0, 0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(0, 14px, 0); }
+}
+@keyframes scroll-chevron {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+
+.hero-float {
+  animation: hero-float 5s ease-in-out infinite;
+  will-change: transform;
+}
+.hero-float-delay {
+  animation-delay: -2.5s;
+}
+@keyframes hero-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-float, .scroll-bounce, .scroll-wheel, .scroll-chevron { animation: none; }
 }
 
 /* Mobile smooth animation speed adjustment */

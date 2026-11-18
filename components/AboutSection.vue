@@ -80,7 +80,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="about" ref="sectionRef" class="py-32 relative bg-black/80 text-white border-t border-white/5 backdrop-blur-[2px]">
+  <section id="about" ref="sectionRef" class="py-32 relative bg-black/80 text-white border-t border-white/5">
     <!-- Section glow accent -->
     <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-900/10 rounded-full blur-[120px] pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-900/8 rounded-full blur-[100px] pointer-events-none"></div>
@@ -93,12 +93,21 @@ onMounted(() => {
         <div class="about-divider mt-6 h-[1px] bg-white/10 w-full"></div>
       </div>
 
-      <div ref="colsRef" class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-        
+      <div ref="colsRef" class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
         <!-- Portrait Image Mask -->
-        <div class="about-reveal lg:col-span-5 w-full">
-          <!-- Placeholder for user's portrait image -->
-          <div class="about-img-container overflow-hidden w-full aspect-[3/4] md:aspect-square lg:aspect-[4/5] rounded-tl-[100px] rounded-br-[100px] border border-white/10 bg-neutral-900 relative">
+        <div class="about-reveal lg:col-span-4 w-full max-w-[320px] sm:max-w-[360px] mx-auto lg:mx-0 relative">
+          <!-- Offset decorative frame -->
+          <div class="absolute -inset-3 translate-x-3 translate-y-3 rounded-tl-[60px] rounded-br-[60px] border border-white/10 pointer-events-none"></div>
+          <!-- Floating info chip -->
+          <div class="absolute -bottom-5 -left-4 z-20 flex items-center gap-3 rounded-full border border-white/10 bg-neutral-950/90 px-4 py-2.5 shadow-xl">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+            </span>
+            <span class="text-[11px] font-mono uppercase tracking-[0.2em] text-neutral-300">Lahore, PK · Open to work</span>
+          </div>
+          <div class="about-img-container overflow-hidden w-full aspect-[4/5] rounded-tl-[60px] rounded-br-[60px] border border-white/10 bg-neutral-900 relative">
             <div class="absolute inset-0 flex items-center justify-center opacity-30 flex-col gap-4">
               <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span class="text-xs uppercase tracking-widest font-bold font-mono">Insert Portrait</span>
@@ -112,13 +121,13 @@ onMounted(() => {
               format="webp"
               quality="75"
               loading="lazy"
-              class="about-img w-full h-[120%] -mt-[10%] object-cover grayscale"
+              class="about-img w-full h-[120%] -mt-[10%] object-cover"
             />
           </div>
         </div>
 
         <!-- Bio Content -->
-        <div class="lg:col-span-7 flex flex-col gap-10">
+        <div class="lg:col-span-8 flex flex-col gap-10">
           
           <div class="flex flex-col gap-6 about-reveal">
             <h3 class="text-3xl md:text-5xl font-black leading-tight tracking-tighter uppercase">
@@ -134,18 +143,18 @@ onMounted(() => {
           </div>
 
           <!-- Stats Grid -->
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 about-reveal pt-8 border-t border-white/10">
-            <div class="flex flex-col gap-2">
-              <span class="stat-count text-5xl font-black tracking-tighter text-white" data-target="3">3+</span>
-              <span class="text-xs uppercase tracking-widest text-neutral-500 font-bold">Years Exp.</span>
+          <div class="grid grid-cols-3 gap-4 md:gap-6 about-reveal">
+            <div class="flex flex-col gap-2 rounded-2xl border border-white/5 bg-white/[0.02] p-5 md:p-6">
+              <span class="stat-count text-4xl md:text-5xl font-black tracking-tighter text-white" data-target="3">3+</span>
+              <span class="text-[10px] md:text-xs uppercase tracking-widest text-neutral-500 font-bold">Years Exp.</span>
             </div>
-            <div class="flex flex-col gap-2">
-              <span class="stat-count text-5xl font-black tracking-tighter text-white" data-target="30">30+</span>
-              <span class="text-xs uppercase tracking-widest text-neutral-500 font-bold">Projects</span>
+            <div class="flex flex-col gap-2 rounded-2xl border border-white/5 bg-white/[0.02] p-5 md:p-6">
+              <span class="stat-count text-4xl md:text-5xl font-black tracking-tighter text-white" data-target="30">30+</span>
+              <span class="text-[10px] md:text-xs uppercase tracking-widest text-neutral-500 font-bold">Projects</span>
             </div>
-            <div class="flex flex-col gap-2">
-              <span class="text-5xl font-black tracking-tighter text-white">100%</span>
-              <span class="text-xs uppercase tracking-widest text-neutral-500 font-bold">Commitment</span>
+            <div class="flex flex-col gap-2 rounded-2xl border border-white/5 bg-white/[0.02] p-5 md:p-6">
+              <span class="text-4xl md:text-5xl font-black tracking-tighter text-white">100%</span>
+              <span class="text-[10px] md:text-xs uppercase tracking-widest text-neutral-500 font-bold">Commitment</span>
             </div>
           </div>
 

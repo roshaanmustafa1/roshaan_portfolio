@@ -3,8 +3,6 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const isEnabled = ref(true)
-let animFrame: number
-let resizeFrame: number
 
 onMounted(() => {
   if (window.innerWidth < 768) {
@@ -12,101 +10,78 @@ onMounted(() => {
     return
   }
 
-  const reduceMotion = false
   const canvas = canvasRef.value
   if (!canvas) return
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
   const GRID = 48
-  interface Dot {
-    x: number
-    y: number
-    baseOpacity: number
-    speed: number
-    phase: number
+  const DOT_RADIUS = 1.1
+
+  // Deterministic per-dot values so dots keep their look while the grid scrolls
+  const hash = (a: number, b: number, salt: number) => {
+    const s = Math.sin(a * 127.1 + b * 311.7 + salt * 74.7) * 43758.5453
+    return s - Math.floor(s)
   }
 
-  let dots: Dot[] = []
+  let width = 0
+  let height = 0
+  let rafId = 0
+  let t = 0
+  let isHidden = document.hidden
 
-  const buildDots = () => {
-    dots = []
-    const width = window.innerWidth
-    const height = document.body.scrollHeight
-
-    for (let x = 0; x < width + GRID; x += GRID) {
-      for (let y = 0; y < height + GRID; y += GRID) {
-        dots.push({
-          x,
-          y,
-          baseOpacity: Math.random() * 0.2 + 0.03,
-          speed: Math.random() * 0.015 + 0.004,
-          phase: Math.random() * Math.PI * 2
-        })
-      }
-    }
-  }
-
+  // The canvas only covers the viewport (fixed). The dot grid is offset by scrollY,
+  // so it looks identical to the old full-page canvas without a giant texture.
   const resize = () => {
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
-    canvas.width = Math.floor(window.innerWidth * dpr)
-    canvas.height = Math.floor(document.body.scrollHeight * dpr)
-    canvas.style.width = `${window.innerWidth}px`
-    canvas.style.height = `${document.body.scrollHeight}px`
+    width = window.innerWidth
+    height = window.innerHeight
+    canvas.width = Math.floor(width * dpr)
+    canvas.height = Math.floor(height * dpr)
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-    buildDots()
   }
 
-  const scheduleResize = () => {
-    if (resizeFrame) cancelAnimationFrame(resizeFrame)
-    resizeFrame = requestAnimationFrame(resize)
+  const draw = () => {
+    rafId = requestAnimationFrame(draw)
+    if (isHidden) return
+    t += 0.01
+
+    const scrollY = window.scrollY
+    const firstRow = Math.floor(scrollY / GRID)
+    const offsetY = firstRow * GRID - scrollY
+
+    ctx.clearRect(0, 0, width, height)
+    ctx.fillStyle = '#fff'
+
+    let col = 0
+    for (let x = 0; x < width + GRID; x += GRID, col++) {
+      let row = firstRow
+      for (let y = offsetY; y < height + GRID; y += GRID, row++) {
+        const baseOpacity = hash(col, row, 1) * 0.2 + 0.03
+        const speed = hash(col, row, 2) * 0.015 + 0.004
+        const phase = hash(col, row, 3) * Math.PI * 2
+        const opacity = Math.max(0, Math.min(0.5, baseOpacity + Math.sin(t * speed * 60 + phase) * 0.12))
+        ctx.globalAlpha = opacity
+        ctx.beginPath()
+        ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2)
+        ctx.fill()
+      }
+    }
+    ctx.globalAlpha = 1
+  }
+
+  const handleVisibilityChange = () => {
+    isHidden = document.hidden
   }
 
   resize()
-
-  const ro = new ResizeObserver(scheduleResize)
-  ro.observe(document.body)
-  window.addEventListener('resize', scheduleResize)
-
-  let isHidden = document.hidden
-  
-  const handleVisibilityChange = () => {
-    isHidden = document.hidden
-    if (!isHidden && !reduceMotion && window.innerWidth >= 768) {
-      if (animFrame) cancelAnimationFrame(animFrame)
-      draw()
-    }
-  }
-
+  window.addEventListener('resize', resize, { passive: true })
   document.addEventListener('visibilitychange', handleVisibilityChange)
-
-  let t = 0
-  const draw = () => {
-    if (isHidden) return
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    t += 0.01
-
-    dots.forEach(dot => {
-      const opacity = Math.max(0, Math.min(0.5, dot.baseOpacity + Math.sin(t * dot.speed * 60 + dot.phase) * 0.12))
-      ctx.beginPath()
-      ctx.arc(dot.x, dot.y, 1.1, 0, Math.PI * 2)
-      ctx.fillStyle = `rgba(255,255,255,${opacity})`
-      ctx.fill()
-    })
-
-    if (!reduceMotion) {
-      animFrame = requestAnimationFrame(draw)
-    }
-  }
-
-  draw()
+  rafId = requestAnimationFrame(draw)
 
   onUnmounted(() => {
-    if (animFrame) cancelAnimationFrame(animFrame)
-    if (resizeFrame) cancelAnimationFrame(resizeFrame)
-    ro.disconnect()
-    window.removeEventListener('resize', scheduleResize)
+    cancelAnimationFrame(rafId)
+    window.removeEventListener('resize', resize)
     document.removeEventListener('visibilitychange', handleVisibilityChange)
   })
 })
@@ -116,7 +91,7 @@ onMounted(() => {
   <canvas
     v-if="isEnabled"
     ref="canvasRef"
-    class="absolute inset-0 w-full h-full pointer-events-none z-0"
+    class="fixed inset-0 w-full h-full pointer-events-none z-0"
     style="opacity: 0.55;"
   ></canvas>
 </template>
